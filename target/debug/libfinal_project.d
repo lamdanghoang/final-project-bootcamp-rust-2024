@@ -1,0 +1,1 @@
+/home/hoanglam/Rust/Bootcamp/Rust-bootcamp-2024/11-Final-Project/target/debug/libfinal_project.rlib: /home/hoanglam/Rust/Bootcamp/Rust-bootcamp-2024/11-Final-Project/src/energy.rs /home/hoanglam/Rust/Bootcamp/Rust-bootcamp-2024/11-Final-Project/src/lib.rs
