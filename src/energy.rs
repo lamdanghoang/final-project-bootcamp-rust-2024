@@ -260,12 +260,13 @@ impl<F: Fuel + IsRenewable> ProvideEnergy<F> for GreenEngine<F> {
 
 /// Define the following struct such that it only provides energy if the fuel's output type is
 /// `BTU`.
-///
 /// It has perfect efficiency.
-pub struct BritishEngine<F: Fuel>(pub PhantomData<F>);
-impl<F: Fuel> ProvideEnergy<F> for BritishEngine<F> {
+pub struct BritishEngine<F: Fuel, Output: From<Joule> + From<Calorie>>(
+    pub PhantomData<(F, Output)>,
+);
+impl<F: Fuel, Output: From<Joule> + From<Calorie>> ProvideEnergy<F> for BritishEngine<F, Output> {
     fn provide_energy(&self, f: FuelContainer<F>) -> <F as Fuel>::Output {
-        todo!()
+        self.provide_energy_ideal(f)
     }
 }
 
@@ -379,19 +380,14 @@ mod tests {
         );
     }
 
-    //     /// Define the following struct such that it only provides energy if the fuel's output type is
-    // /// `BTU`.
-    // ///
-    // /// It has perfect efficiency.
-    // pub struct BritishEngine<F: Fuel + From<Joule> + From<Calorie>>(pub PhantomData<F>);
-    // impl<F: Fuel + From<Joule> + From<Calorie>> ProvideEnergy<F> for BritishEngine<F> {
-    //     fn provide_energy(&self, f: FuelContainer<F>) -> <F as Fuel>::Output {
-    //         self.provide_energy_ideal(f)
-    //     }
-    // }
-
     #[test]
     fn british_should_work() {
-        todo!()
+        let be = BritishEngine::<Mixed<Diesel, LithiumBattery>, BTU>(
+            PhantomData::<(Mixed<Diesel, LithiumBattery>, BTU)>,
+        );
+        assert_eq!(
+            be.provide_energy(FuelContainer::<Mixed<Diesel, LithiumBattery>>::new(10)),
+            1500
+        );
     }
 }
